@@ -7,7 +7,7 @@ OBJ_DIR = ./obj
 BIN_DIR = ./bin
 
 # Nome do executável
-TARGET = $(BIN_DIR)/main
+TARGET = $(BIN_DIR)/fecho
 
 # Arquivos fonte e objetos
 SOURCES := $(wildcard $(SRC_DIR)/*.cpp)
@@ -22,7 +22,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 # Regra de ligação
 $(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+	$(CXX) $(CXXFLAGS) $^ -o $@ -pg
 
 # Regra para compilar e executar o programa
 run: all
