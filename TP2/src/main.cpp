@@ -7,6 +7,8 @@
 using namespace std;
 
 int main(int arg, char **argv) {
+    
+    
     if (arg < 2) {
         cout << "Erro: Nenhum nome de arquivo fornecido" << endl;
         return 1;
@@ -33,9 +35,11 @@ int main(int arg, char **argv) {
         n++;
     }
 
-    n = sizeof(points) / sizeof(points[0]);
+    /* Stack stack = Stack();
+    Point points[] = {{27,11}, {6,8}, {6,82}, {19,82}, {33,96}, {45,13}, {38,82}, {6,22}, {68,79}, {66,68}};
+    int n = sizeof(points) / sizeof(points[0]); 
 
-    cout<<n<<endl;
+    cout<<n<<endl; */
 
     stack = convexHullMergesort(points, n);
 

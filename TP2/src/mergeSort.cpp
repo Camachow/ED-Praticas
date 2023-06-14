@@ -6,43 +6,67 @@ void merge(Point* points, int low, int mid, int high) {
     int n1 = mid - low + 1;
     int n2 = high - mid;
 
-    Point* left = new Point[n1 * sizeof(Point)];
-    Point* right = new Point[n2 * sizeof(Point)];
+    Point* left = new Point[n1];
+    Point* right = new Point[n2];
+
+    int auxleft = 0;
+    int auxright = 0;
+
+    int indexToMerge = low;
 
     for (int i = 0; i < n1; i++) {
         left[i] = points[low + i];
     }
-    for (int j = 0; j < n2; j++) {
-        right[j] = points[mid + 1 + j];
+
+    for (int i = 0; i < n2; i++) {
+        right[i] = points[mid + 1 + i];
     }
 
-    int i = 0;
-    int j = 0;
-    int k = low;
-
-    while (i < n1 && j < n2) {
-        if (getAngle(left[i]) <= getAngle(right[j])) {
-            points[k] = left[i];
-            i++;
-        } else {
-            points[k] = right[j];
-            j++;
+    while (auxleft < n1 && auxright < n2) {
+        if (left[auxleft].getY() < right[auxright].getY()) {
+            points[indexToMerge] = left[auxleft];
+            auxleft++;
+        } else if (left[auxleft].getY() == right[auxright].getY()) {
+            if (left[auxleft].getX() < right[auxright].getX()) {
+                points[indexToMerge] = left[auxleft];
+                auxleft++;
+            } else {
+                points[indexToMerge] = right[auxright];
+                auxright++;
+            }
         }
-        k++;
+        else {
+            points[indexToMerge] = right[auxright];
+            auxright++;
+        }
+        indexToMerge++;   
     }
 
-    while (i < n1) {
-        points[k] = left[i];
-        i++;
-        k++;
+    while (auxleft < n1) {
+        points[indexToMerge] = left[auxleft];
+        auxleft++;
+        indexToMerge++;
     }
 
-    while (j < n2) {
-        points[k] = right[j];
-        j++;
-        k++;
+    while (auxright < n2) {
+        points[indexToMerge] = right[auxright];
+        auxright++;
+        indexToMerge++;
     }
 
+    for(int i = low + 1; i <= high; i++){
+        for(int j = i + 1; j <= high; j++){
+            double angle1 = getAngle(points[i]);
+            double angle2 = getAngle(points[j]);
+
+            if(angle1 > angle2){
+                Point aux = points[i];
+                points[i] = points[j];
+                points[j] = aux;
+            }
+        }
+    }
+    
     delete[] left;
     delete[] right;
 
