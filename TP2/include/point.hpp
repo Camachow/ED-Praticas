@@ -2,6 +2,8 @@
 #define POINT_HPP
 #include <math.h>
 
+using namespace std;
+
 class Point {
 private:
     int x, y;

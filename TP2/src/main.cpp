@@ -1,5 +1,6 @@
 #include "../include/graham.hpp"  
 #include "../include/timer.hpp"
+#include "../include/jarvis.hpp"
 #include "bits/getopt_core.h"
 #include <iostream>
 #include <fstream>
@@ -35,6 +36,10 @@ int main(int arg, char **argv) {
         n++;
     }
 
+    cout << "Pontos da entrada:" << endl;
+    for(int i = 0; i < n; i++){
+        cout << "(" << points[i].getX() << " " << points[i].getY() << ")" << endl;
+    }
     /* Stack stack = Stack();
     Point points[] = {{27,11}, {6,8}, {6,82}, {19,82}, {33,96}, {45,13}, {38,82}, {6,22}, {68,79}, {66,68}};
     int n = sizeof(points) / sizeof(points[0]); 
@@ -59,6 +64,11 @@ int main(int arg, char **argv) {
     for(int i = 0; i < stack.getSize(); i++)
         cout << "(" << stack.getPoint(i).getX() << " " << stack.getPoint(i).getY() << ")" << endl;
 
+    stack = convexHullJarvis(points, n);
+
+    cout << "FECHO CONVEXO JARVIS" << endl;
+    for(int i = 0; i < stack.getSize(); i++)
+        cout << "(" << stack.getPoint(i).getX() << " " << stack.getPoint(i).getY() << ")" << endl;
 
 
     struct rusage start, end;
@@ -79,6 +89,12 @@ int main(int arg, char **argv) {
     stack = convexHullBucketSort(points, n);
     getrusage(RUSAGE_SELF, &end);
     printf("GRAHAM + BUCKETSORT: %f\n", userTime(&start, &end));
+    stack.clear();
+    
+    getrusage(RUSAGE_SELF, &start);
+    stack = convexHullJarvis(points, n);
+    getrusage(RUSAGE_SELF, &end);
+    printf("JARVIS: %f\n", userTime(&start, &end));
     stack.clear();
 
     return 0;
