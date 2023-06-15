@@ -75,9 +75,9 @@ Stack grahamScan(Point* points, int n, Point p0){
 Stack convexHullMergesort(Point* points, int n) {
     Stack stack = Stack();
     // Verificar se há pontos suficientes para construir um fecho convexo
-    /* if (n < 3) {
+    if (n < 3) {
         throw "Não é possível construir um fecho convexo.";
-    } */
+    }
 
     // Encontrar o ponto com menor coordenada y
     // Se houver mais de um ponto com a menor coordenada y,
