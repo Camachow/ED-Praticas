@@ -16,7 +16,7 @@ int main(int arg, char **argv) {
     }
 
     Stack stack = Stack();
-    Point points[10000];
+    Point points[100000];
     
     ifstream file(argv[1]);
 
@@ -52,7 +52,7 @@ int main(int arg, char **argv) {
     for(int i = 0; i < stack.getSize(); i++)
         cout << "(" << stack.getPoint(i).getX() << " " << stack.getPoint(i).getY() << ")" << endl;
 
-    stack = convexHullInsertionSort(points, n);
+    /* stack = convexHullInsertionSort(points, n);
 
     cout << "FECHO CONVEXO GRAHAM + INSERTION" << endl;
     for(int i = 0; i < stack.getSize(); i++)
@@ -70,7 +70,7 @@ int main(int arg, char **argv) {
     for(int i = 0; i < stack.getSize(); i++)
         cout << "(" << stack.getPoint(i).getX() << " " << stack.getPoint(i).getY() << ")" << endl;
 
-
+ */
     struct rusage start, end;
 
     getrusage(RUSAGE_SELF, &start);
@@ -89,7 +89,7 @@ int main(int arg, char **argv) {
     stack = convexHullBucketSort(points, n);
     getrusage(RUSAGE_SELF, &end);
     printf("GRAHAM + BUCKETSORT: %f\n", userTime(&start, &end));
-    stack.clear();
+    stack.clear(); 
     
     getrusage(RUSAGE_SELF, &start);
     stack = convexHullJarvis(points, n);

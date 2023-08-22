@@ -1,6 +1,6 @@
 #ifndef BUCKET_SORT_HPP
 #define BUCKET_SORT_HPP
-#define TAM_BUCKET 20
+#define TAM_BUCKET 30
 
 #include "point.hpp"
 #include "stack.hpp"
