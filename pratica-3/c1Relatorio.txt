@@ -1,0 +1,21 @@
+## Análise de códigoe e identificação de erros
+O código apresenta erro pois o malloc aloca 40 bites de memoria em "a" e o loop em seguida tenta percorrer até um valor maior que esse.
+
+##Confirme sua avaliação ou identifique os problemas
+    Utilizando o valgrind, obtemos:
+    Invalid write of size 4
+        ==29307==    at 0x1091D8: main (in /home/camacho/ufmg/ED/estrutura-de-dados/Práticas/pratica-3/programa)
+        ==29307==  Address 0x4a4c068 is 0 bytes after a block of size 40 alloc'd
+        ==29307==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+        ==29307==    by 0x1091A5: main (in /home/camacho/ufmg/ED/estrutura-de-dados/Práticas/pratica-3/programa)
+
+##Correção do código
+    Basta diminuir as interações no loop para 10.
+
+##Verifiicando a remoção do erro
+    Ao utilizar o valgrind, obtemos:
+        ==31372== HEAP SUMMARY:
+        ==31372==     in use at exit: 0 bytes in 0 blocks
+        ==31372==   total heap usage: 1 allocs, 1 frees, 40 bytes allocated
+        ==31372== 
+        ==31372== All heap blocks were freed -- no leaks are possible
