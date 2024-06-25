@@ -1,16 +1,39 @@
 #include "../include/utils.h"
 #include <iostream>
+#include <sys/time.h>
+#include <cstdlib>
+#include <iomanip>
 
-// Função para imprimir os elementos do array
-void printIntArray(int arr[], int n) {
-    for (int i = 0; i < n; ++i) {
-        std::cout << arr[i] << " "; // Use std::cout for output
-    }
-    std::cout << std::endl; // Use std::endl for line break
+double getExecutionTime(void (*sortFunc)(int[], int), int arr[], int size) {
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+    sortFunc(arr, size);
+    gettimeofday(&end, NULL);
+    double executionTime = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    return executionTime;
 }
 
-//print para float
-void printFloatArray(float arr[], int n) {
+// Funções para gerar vetores
+void generateRandomArray(int arr[], int size, int max) {
+    for (int i = 0; i < size; ++i) {
+        arr[i] = rand() % max; // Valores aleatórios
+    }
+}
+
+void generateSortedArray(int arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        arr[i] = i;
+    }
+}
+
+void generateReverseSortedArray(int arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        arr[i] = size - i;
+    }
+}
+
+// Função para imprimir os elementos do array
+void printArray(int arr[], int n) {
     for (int i = 0; i < n; ++i) {
         std::cout << arr[i] << " "; // Use std::cout for output
     }
@@ -18,16 +41,6 @@ void printFloatArray(float arr[], int n) {
 }
 
 int getMax(int arr[], int size) {
-    int max = arr[0];
-    for (int i = 1; i < size; i++) {
-        if (arr[i] > max) {
-            max = arr[i];
-        }
-    }
-    return max;
-}
-
-int findMax(int arr[], int size) {
     int max = arr[0];
     for (int i = 1; i < size; i++) {
         if (arr[i] > max) {

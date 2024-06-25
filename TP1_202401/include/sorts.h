@@ -4,7 +4,7 @@
 
 void bubbleSort(int arr[], int n);
 
-void insertionSort(float arr[], int n);
+void insertionSort(int arr[], int n);
 
 void selectionSort(int arr[], int n);
 
@@ -17,7 +17,7 @@ void shellSort(int arr[], int n);
 
 void countingSort(int arr[], int n);
 
-void bucketSort(float arr[], int n);
+void bucketSort(int arr[], int n);
 
 void countingSortRadix(int arr[], int n, int exp);
 

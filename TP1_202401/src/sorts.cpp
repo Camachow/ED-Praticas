@@ -17,9 +17,9 @@ void bubbleSort(int arr[], int n) {
 }
 
 // InsertionSort
-void insertionSort(float arr[], int n) {
+void insertionSort(int arr[], int n) {
     for (int i = 1; i < n; i++) {
-        float key = arr[i];
+        int key = arr[i];
         int j = i - 1;
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];
@@ -100,7 +100,7 @@ void shellSort(int arr[], int n) {
 // CountingSort
 void countingSort(int arr[], int size) {
     // Encontra o maior elemento no array
-    int max = findMax(arr, size);
+    int max = getMax(arr, size);
 
     // Cria um array de contagem com tamanho suficiente para armazenar contagens de todos os elementos até o maior valor
     int* count = new int[max + 1]();
@@ -124,36 +124,42 @@ void countingSort(int arr[], int size) {
 }
 
 // BucketSort
-void bucketSort(float arr[], int size) {
-    // Número de buckets
-    const int bucketCount = 10;
-    float buckets[bucketCount][size];
-    int bucketSizes[bucketCount];
+void bucketSort(int arr[], int n) {
+    int maxVal = getMax(arr, n);
+    int bucketCount = n; // Usar o número de elementos como número de buckets
 
-    // Inicializar o tamanho dos buckets como zero
+    // Criar buckets
+    int** buckets = new int*[bucketCount];
+    int* bucketSizes = new int[bucketCount]();
+
+    // Inicializar arrays dos buckets
     for (int i = 0; i < bucketCount; i++) {
-        bucketSizes[i] = 0;
+        buckets[i] = new int[n];
     }
 
-    // Distribuir os elementos nos buckets
-    for (int i = 0; i < size; i++) {
-        int bucketIndex = static_cast<int>(arr[i] * bucketCount); // Multiplicando por 10 para colocar no bucket correto
+    // Distribuir elementos nos buckets
+    for (int i = 0; i < n; i++) {
+        int bucketIndex = (bucketCount * arr[i]) / (maxVal + 1); // Distribuição ajustada
         buckets[bucketIndex][bucketSizes[bucketIndex]++] = arr[i];
     }
 
-    // Ordenar cada bucket usando Insertion Sort
-    for (int i = 0; i < bucketCount; i++) {
-        insertionSort(buckets[i], bucketSizes[i]);
-    }
-
-    // Concatenar todos os buckets no array original
+    // Ordenar buckets individuais e mesclar de volta no array original
     int index = 0;
     for (int i = 0; i < bucketCount; i++) {
+        insertionSort(buckets[i], bucketSizes[i]);
         for (int j = 0; j < bucketSizes[i]; j++) {
             arr[index++] = buckets[i][j];
         }
     }
+
+    // Liberar memória
+    for (int i = 0; i < bucketCount; i++) {
+        delete[] buckets[i];
+    }
+    delete[] buckets;
+    delete[] bucketSizes;
 }
+
 
 // CountSort
 void countSortRadix(int arr[], int size, int exp) {
