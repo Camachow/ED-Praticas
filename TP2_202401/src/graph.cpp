@@ -1,5 +1,5 @@
 // src/graph.cpp
-#include "../include/graph.h"
+#include "graph.h"
 #include <cmath>
 
 Graph::Graph(int n) : adj_list(n), portals(n), coordinates(n, {0.0, 0.0}), n(n) {}

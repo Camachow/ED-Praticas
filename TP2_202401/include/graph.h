@@ -3,6 +3,7 @@
 #define GRAPH_H
 
 #include "my_vector.h"
+#include <utility> // Para std::pair
 
 struct Edge
 {

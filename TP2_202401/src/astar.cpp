@@ -1,15 +1,11 @@
 // src/astar.cpp
-#include "../include/astar.h"
+#include "astar.h"
 #include <limits>
 
 bool a_star(const Graph &graph, double s, int q)
 {
     int n = graph.size();
-    MyVector<MyVector<double>> dist(n);
-    for (int i = 0; i < n; ++i)
-    {
-        dist[i] = MyVector<double>(q + 1, std::numeric_limits<double>::infinity());
-    }
+    MyVector<MyVector<double>> dist(n, MyVector<double>(q + 1, std::numeric_limits<double>::infinity()));
     dist[0][0] = 0.0;
 
     PriorityQueue<State> pq;
@@ -24,13 +20,15 @@ bool a_star(const Graph &graph, double s, int q)
         double cost = current.cost;
         int portals_used = current.portals_used;
 
-        if (u == n - 1)
-            return cost <= s;
+        if (u == n - 1 && cost <= s)
+        {
+            return true;
+        }
 
         if (cost > dist[u][portals_used])
             continue;
 
-        for (int i = 0; i < graph.getAdjList(u).size(); ++i)
+        for (size_t i = 0; i < graph.getAdjList(u).size(); ++i)
         {
             Edge edge = graph.getAdjList(u)[i];
             int v = edge.to;
@@ -44,7 +42,7 @@ bool a_star(const Graph &graph, double s, int q)
 
         if (portals_used < q)
         {
-            for (int i = 0; i < graph.getPortals(u).size(); ++i)
+            for (size_t i = 0; i < graph.getPortals(u).size(); ++i)
             {
                 Portal portal = graph.getPortals(u)[i];
                 int v = portal.to;
