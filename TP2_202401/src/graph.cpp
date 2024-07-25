@@ -2,16 +2,16 @@
 #include "graph.h"
 #include <cmath>
 
-Graph::Graph(int n) : adj_list(n), portals(n), coordinates(n, {0.0, 0.0}), n(n) {}
+Graph::Graph(int n) : adjList(n), portals(n), coordinates(n) {}
 
 void Graph::addEdge(int u, int v, double weight)
 {
-    adj_list[u].push_back(Edge(v, weight));
+    adjList[u].push_back({v, weight});
 }
 
 void Graph::addPortal(int u, int v)
 {
-    portals[u].push_back(Portal(v));
+    portals[u].push_back({v});
 }
 
 void Graph::addCoordinates(int index, double x, double y)
@@ -28,7 +28,7 @@ double Graph::euclideanDistance(int u, int v) const
 
 const MyVector<Edge> &Graph::getAdjList(int u) const
 {
-    return adj_list[u];
+    return adjList[u];
 }
 
 const MyVector<Portal> &Graph::getPortals(int u) const
@@ -38,5 +38,5 @@ const MyVector<Portal> &Graph::getPortals(int u) const
 
 int Graph::size() const
 {
-    return n;
+    return adjList.size();
 }

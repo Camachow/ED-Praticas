@@ -1,20 +1,27 @@
-// include/state.h
 #ifndef STATE_H
 #define STATE_H
 
 struct State
 {
-    double cost;
-    double heuristic_cost;
     int vertex;
     int portals_used;
+    double distance;
+    double cost; // Adicionado para o custo do A*
 
-    State(double c = 0, double hc = 0, int v = 0, int pu = 0)
-        : cost(c), heuristic_cost(hc), vertex(v), portals_used(pu) {}
+    State() : vertex(0), portals_used(0), distance(0.0), cost(0.0) {} // Construtor padrão
+
+    State(int v, int p, double d) : vertex(v), portals_used(p), distance(d), cost(d) {} // Construtor de 3 argumentos
+
+    State(int v, int p, double d, double c) : vertex(v), portals_used(p), distance(d), cost(c) {} // Construtor de 4 argumentos
+
+    bool operator>(const State &other) const
+    {
+        return cost > other.cost;
+    }
 
     bool operator<(const State &other) const
     {
-        return heuristic_cost > other.heuristic_cost; // menor custo tem maior prioridade
+        return cost < other.cost;
     }
 };
 

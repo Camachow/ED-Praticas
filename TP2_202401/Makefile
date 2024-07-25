@@ -1,49 +1,29 @@
-# Nome do compilador
 CXX = g++
+CXXFLAGS = -Wall -Wextra -std=c++17 -Iinclude
 
-# Flags de compilação
-CXXFLAGS = -Wall -Wextra -std=c++17 -g
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
 
-# Diretórios
-INCDIR = include
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+TARGET = $(BIN_DIR)/tp2.out
 
-# Nome do executável
-TARGET = $(BINDIR)/tp2.out
-
-# Headers
-HEADERS = $(wildcard $(INCDIR)/*.h)
-
-# Arquivos fonte
-SOURCES = $(wildcard $(SRCDIR)/*.cpp)
-
-# Arquivos objeto
-OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
-
-# Regras de compilação e ligação
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	@mkdir -p $(BINDIR)
+$(TARGET): $(OBJECTS) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(HEADERS)
-	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -I$(INCDIR) -o $@ -c $<
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-# Limpeza dos arquivos compilados
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-# Executa o programa
-run: $(TARGET)
-	$(TARGET)
-
-# Regra para rodar o Valgrind
-valgrind: $(TARGET)
-	valgrind --leak-check=full $(TARGET)
-
-# Regra de phony para evitar conflitos com arquivos de mesmo nome
-.PHONY: all clean run valgrind
+.PHONY: all clean

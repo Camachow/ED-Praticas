@@ -1,12 +1,14 @@
-// include/dijkstra.h
 #ifndef DIJKSTRA_H
 #define DIJKSTRA_H
 
-#include "../include/graph.h"
-#include "../include/priority_queue.h"
-#include "../include/state.h"
-#include "../include/my_vector.h"
+#include "graph.h"
+#include "matrix_graph.h"
+#include "priority_queue.h"
+#include "state.h"
+#include <limits>
 
-bool dijkstra(const Graph &graph, double s, int q);
+template <typename GraphType>
+bool dijkstra(const GraphType &graph, double max_energy, int max_portals);
 
+#include "dijkstra_impl.h"
 #endif // DIJKSTRA_H
