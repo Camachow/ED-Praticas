@@ -159,7 +159,7 @@ int determina_limiar_particao(int *v, int tam, double limiarCusto, double A, dou
       for (int i = 0; i < tam; i++)
         vcopy[i] = v[i];
 
-      ordenador_universal(vcopy, tam, t, tam);
+      ordenador_universal(vcopy, tam, t, 0);
       get_stats(&cmp, &mov, &calls);
 
       custos[num] = calcula_custo(cmp, mov, calls);
