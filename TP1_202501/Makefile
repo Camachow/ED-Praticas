@@ -1,29 +1,28 @@
-# Makefile para o TP1 - Ordenador Universal
+# Makefile
 
+# Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Iinclude -O2
-OBJDIR = obj
-BINDIR = bin
-SRCDIR = src
+CFLAGS = -Wall -Wextra -std=c11 -O2 -D_XOPEN_SOURCE=700 -Iinclude
 
-OBJS = $(OBJDIR)/main.o \
-       $(OBJDIR)/ordenador.o \
-       $(OBJDIR)/calibrador.o \
-       $(OBJDIR)/shuffle.o
-
-TARGET = $(BINDIR)/tp1.out
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	@mkdir -p $(BINDIR)
-	$(CC) $(CFLAGS) -o $@ $^
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-clean:
-	rm -rf $(OBJDIR)/*.o $(BINDIR)/tp1.out
+# Source and object files
+SRCS := $(wildcard src/*.c)
+OBJS := $(patsubst src/%.c,obj/%.o,$(SRCS))
 
 .PHONY: all clean
+
+# Default target
+all: tp1
+
+# Link executable
+tp1: $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Compile source to object
+obj/%.o: src/%.c
+	@mkdir -p obj
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Clean build artifacts
+clean:
+	rm -rf obj tp1
+	rm -rf obj tp1

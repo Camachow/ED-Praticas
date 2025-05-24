@@ -1,68 +1,83 @@
-// main.c
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#include "ordenador.h"
-#include "calibrador.h"
-
-#define MAX_TAM 100000
-
-extern int shuffleVector(int *vet, int size, int numShuffle, int seed);
+#include "../include/dataElement.h"
+#include "../include/universalSorter.h"
+#include "../include/sortingAlgorithms.h"
+#include "../include/fileValidator.h"
+#include "../include/analysis.h"
 
 int main(int argc, char *argv[])
 {
+  int size, seed, disruptions;
+  int partition;
+  double costThreshold, paramA, paramB, paramC;
+  DataElement *array;
+  const char *fileName;
+
   if (argc != 2)
   {
-    fprintf(stderr, "Uso: %s <arquivo_entrada>\n", argv[0]);
+    fprintf(stderr, "Erro: É necessário fornecer o nome do arquivo como argumento.\n");
     return 1;
   }
 
-  FILE *f = fopen(argv[1], "r");
-  if (!f)
+  fileName = argv[1];
+  if (!CheckFileFormat(fileName))
   {
-    perror("Erro ao abrir arquivo");
+    return 0;
+  }
+
+  FILE *file = fopen(fileName, "r");
+  if (!file)
+  {
+    fprintf(stderr, "Erro ao abrir arquivo: %s\n", fileName);
     return 1;
   }
 
-  int seed, tam;
-  double limiarCusto, a, b, c;
-  int vetor[MAX_TAM];
-
-  // Leitura do arquivo com verificação
-  if (fscanf(f, "%d", &seed) != 1)
-    return 1;
-  if (fscanf(f, "%lf", &limiarCusto) != 1)
-    return 1;
-  if (fscanf(f, "%lf", &a) != 1)
-    return 1;
-  if (fscanf(f, "%lf", &b) != 1)
-    return 1;
-  if (fscanf(f, "%lf", &c) != 1)
-    return 1;
-  if (fscanf(f, "%d", &tam) != 1)
-    return 1;
-
-  for (int i = 0; i < tam; i++)
+  if (fscanf(file, "%d", &seed) != 1 ||
+      fscanf(file, "%lf", &costThreshold) != 1 ||
+      fscanf(file, "%lf", &paramA) != 1 ||
+      fscanf(file, "%lf", &paramB) != 1 ||
+      fscanf(file, "%lf", &paramC) != 1 ||
+      fscanf(file, "%d", &size) != 1)
   {
-    if (fscanf(f, "%d", &vetor[i]) != 1)
+    fprintf(stderr, "Erro ao ler parâmetros do arquivo\n");
+    fclose(file);
+    return 1;
+  }
+
+  array = (DataElement *)malloc(sizeof(DataElement) * size);
+  if (!array)
+  {
+    fprintf(stderr, "Erro de alocação de memória\n");
+    fclose(file);
+    return 1;
+  }
+
+  for (int i = 0; i < size; i++)
+  {
+    int element;
+    if (fscanf(file, "%d", &element) != 1)
+    {
+      fprintf(stderr, "Erro ao ler elemento #%d\n", i);
+      free(array);
+      fclose(file);
       return 1;
+    }
+    array[i].key = element;
   }
-  fclose(f);
+  fclose(file);
 
-  // Determina limiares calibrados
-  int minTamParticao = determina_limiar_particao(vetor, tam, limiarCusto, a, b, c);
-  int limiarQuebras = determina_limiar_quebras(tam, limiarCusto, a, b, c, seed);
+  UniversalSorter test;
+  UniversalSorter_init(&test, array, size, costThreshold, paramA, paramB, paramC, seed);
+  disruptions = countDisruptions(array, 0, size);
+  printf("size %d seed %d breaks %d\n", size, seed, disruptions);
 
-  // Chamada do Ordenador Universal
-  ordenador_universal(vetor, tam, minTamParticao, limiarQuebras);
+  partition = UniversalSorter_findOptimalPartitionThreshold(&test);
+  partition = UniversalSorter_findDisruptionThreshold(&test, partition);
 
-  // Estatísticas
-  long long cmp, mov, calls;
-  get_stats(&cmp, &mov, &calls);
-  double custo = a * cmp + b * mov + c * calls;
+  // Descomente a linha abaixo para executar a análise experimental completa
+  // RunExperimentAnalysis();
 
-  printf("cmp %lld move %lld calls %lld\n", cmp, mov, calls);
-  printf("cost %.9lf\n", custo);
-
+  free(array);
   return 0;
 }
